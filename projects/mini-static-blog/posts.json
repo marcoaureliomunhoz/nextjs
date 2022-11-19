@@ -1,0 +1,22 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "Post 1",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam libero ante, commodo ut libero et, euismod tincidunt dui. Fusce sodales tempor augue eu dictum. Suspendisse potenti. Praesent volutpat ante vitae rhoncus fringilla. Maecenas maximus nisl turpis, vitae convallis quam vulputate in. Suspendisse egestas molestie tristique. Cras lobortis elit a cursus ullamcorper. Pellentesque ut quam nisl.",
+      "date": "11/11/2022"
+    },
+    {
+      "id": "2",
+      "title": "Post 2",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ligula erat, interdum eget condimentum non, pellentesque ut arcu. Etiam ut nisi vel purus euismod imperdiet et vitae tellus. Duis eget aliquet enim. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam convallis enim eu consectetur fringilla. Integer accumsan augue eget aliquam lobortis. Pellentesque eget iaculis odio. Integer ut fringilla massa. Suspendisse consequat placerat justo, a ornare erat.",
+      "date": "12/11/2022"
+    },
+    {
+      "id": "3",
+      "title": "Post 3",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vel purus luctus, hendrerit erat et, tempus eros. Nulla in accumsan diam. Praesent dictum justo id nulla placerat, et facilisis ligula condimentum. Cras hendrerit, sapien sodales cursus ultrices, ligula odio consectetur neque, nec cursus felis diam id mauris. Sed eget aliquam augue, eget ullamcorper massa. Phasellus at auctor ligula, sit amet aliquam lacus. Morbi bibendum tincidunt felis eu malesuada. Cras tempor sed urna ac hendrerit.",
+      "date": "13/11/2022"
+    }
+  ]
+}

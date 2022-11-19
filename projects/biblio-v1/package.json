@@ -1,0 +1,34 @@
+{
+  "name": "biblio-v1",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prisma": "prisma studio --port 5454",
+    "migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.6.1",
+    "@types/node": "18.11.9",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.9",
+    "eslint": "8.28.0",
+    "eslint-config-next": "13.0.4",
+    "next": "13.0.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.6.0",
+    "typescript": "4.9.3"
+  },
+  "devDependencies": {
+    "prisma": "^4.6.1",
+    "prisma-erd-generator": "^1.2.4",
+    "tsx": "^3.12.1"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}
