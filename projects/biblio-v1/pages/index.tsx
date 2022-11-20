@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { BiblioNavMenu } from '../components/BiblioNavMenu';
 import { db } from '../infra/data/db';
 
@@ -32,17 +33,22 @@ export default function PageHome({
   livros
 }: PageProps) {
   return (
-    <BiblioNavMenu page='home'>
-      <div style={{display:'flex', justifyContent:'space-between'}}>
-        <article style={{flex:'1', border:'2px solid #eee', marginRight:'5px', padding:'10px'}}>
-          <h3 style={{margin:'0px'}}>Editoras</h3>
-          <p style={{margin:'0px', fontSize:'1.2em'}}>{editoras.numero}</p>
-        </article>
-        <article style={{flex:'1', border:'2px solid #eee', marginLeft:'5px', padding:'10px'}}>
-          <h3 style={{margin:'0px'}}>Livros</h3>
-          <p style={{margin:'0px', fontSize:'1.2em'}}>{livros.numero}</p>
-        </article>
-      </div>
-    </BiblioNavMenu>
+    <>
+      <Head>
+        <title>Home</title>
+      </Head>
+      <BiblioNavMenu page='home'>
+        <div style={{display:'flex', justifyContent:'space-between'}}>
+          <article style={{flex:'1', border:'2px solid #eee', marginRight:'5px', padding:'10px'}}>
+            <h3 style={{margin:'0px'}}>Editoras</h3>
+            <p style={{margin:'0px', fontSize:'1.2em'}}>{editoras.numero}</p>
+          </article>
+          <article style={{flex:'1', border:'2px solid #eee', marginLeft:'5px', padding:'10px'}}>
+            <h3 style={{margin:'0px'}}>Livros</h3>
+            <p style={{margin:'0px', fontSize:'1.2em'}}>{livros.numero}</p>
+          </article>
+        </div>
+      </BiblioNavMenu>
+    </>
   )
 }
