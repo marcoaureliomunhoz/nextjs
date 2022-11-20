@@ -1,7 +1,8 @@
 import React from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FiEdit } from 'react-icons/fi';
-import { RiDeleteBin5Line, RiAddCircleLine } from 'react-icons/ri';
+import { RiDeleteBin5Line, RiAddCircleLine, RiExternalLinkLine } from 'react-icons/ri';
 import { BiblioNavMenu } from '../../components/BiblioNavMenu';
 import { Modal } from '../../components/Modal';
 import { db } from '../../infra/data/db';
@@ -11,18 +12,30 @@ interface PageProps {
   editoras: Editora[];
 }
 
-export async function getStaticProps(context: any): Promise<{props: PageProps}> {
+interface StaticProps {
+  props: PageProps;
+  revalidade?: number;
+}
+
+// mesmo fazendo reload após adicionar/alterar/excluir uma editora
+// as alterações no banco de dados não refletem em getStaticProps
+// para que as alterações reflitam é necessário usar revalidate (Incremental Static Regeneration)
+
+export async function getStaticProps(context: any): Promise<StaticProps> {
   
   const editoras = await db.editora.findMany();
 
-  return {
+  const staticProps = {
     props: {
       editoras: editoras.map(editora => ({
         id: Number(editora.id),
         nome: editora.nome
       }))
-    }
-  }
+    },
+    revalidate: 10
+  };
+
+  return staticProps;
 }
 
 export default function PageEditoras({
@@ -65,27 +78,31 @@ export default function PageEditoras({
 
   return (
     <>
+      <Head>
+        <title>Editoras</title>
+      </Head>
       <BiblioNavMenu
         page='editoras'
         buttons={[
-          {title: 'Adicionar', rightIcon: <RiAddCircleLine />, click: adicionar}
+          {title: 'Adicionar por modal', rightIcon: <RiAddCircleLine />, click: adicionarPorModal},
+          {title: 'Adicionar por página', rightIcon: <RiExternalLinkLine />, click: adicionarPorPagina},
         ]}
       >
         <table style={{width:'100%'}}>
           <thead>
             <tr>
-              <th>Código</th>
-              <th>Nome</th>
-              <th></th>
+              <th style={{width:'150px', minWidth:'150px', maxWidth:'150px'}}>Código</th>
+              <th style={{width:'90%'}}>Nome</th>
+              <th style={{width:'64px', minWidth:'64px'}}></th>
             </tr>
           </thead>
           <tbody>
             {editoras?.map(editora => {
               return (
                 <tr key={`editora-${editora.id}`}>
-                  <td style={{width:'100px', minWidth:'100px'}}>{editora.id}</td>
-                  <td style={{width:'90%'}}>{editora.nome}</td>
-                  <td style={{width:'64px', minWidth:'64px', display:'flex', justifyContent:'space-between', alignItems:'center', alignContent:'center'}}>
+                  <td>{editora.id}</td>
+                  <td>{editora.nome}</td>
+                  <td style={{display:'flex', justifyContent:'space-between', alignItems:'center', alignContent:'center'}}>
                     <FiEdit size='24px' color='gray' style={{cursor:'pointer'}} onClick={() => editar(editora)} />
                     <RiDeleteBin5Line size='26px' color='red' style={{cursor:'pointer'}} onClick={() => excluir(editora)} />
                   </td>
@@ -99,9 +116,13 @@ export default function PageEditoras({
     </>
   );
 
-  function adicionar() {
+  function adicionarPorModal() {
     setNomeEditora('');
     setModalForm(true);
+  }
+
+  function adicionarPorPagina() {
+    router.push('/editoras/adicionar');
   }
 
   function fecharModal() {
@@ -112,7 +133,7 @@ export default function PageEditoras({
 
   async function salvar() {
     if (!nomeEditora) {
-      return alert('Informe um nome válido!');
+      return alert('Informe o nome da editora!');
     }
     fetch(`/api/editoras${idEditora ? '/'+idEditora : ''}`, {
       method: idEditora ? 'PUT' : 'POST',
@@ -131,7 +152,7 @@ export default function PageEditoras({
     }).then(async response => {
       //const data = await response.json();
       fecharModal();
-      router.reload();
+      //router.reload();
     });
   }
 
