@@ -24,7 +24,7 @@ interface NavMenuProps {
 
 export function NavMenu({ children, items, buttons }: NavMenuProps) {
   return (
-    <div style={styles.container}>
+    <div style={{ flexDirection:'column', ...styles.container }}>
       <div style={styles.header}>
         <nav>
           <ul className="nav-menu-options">
@@ -45,7 +45,7 @@ export function NavMenu({ children, items, buttons }: NavMenuProps) {
             })}
           </ul>
         </nav>
-        <div>
+        <div style={{display:'flex'}}>
           {buttons?.map((btn) => {
             return (
               <button key={`btn-${btn.title}`} onClick={btn.click} style={{border:'none', display:'flex', alignItems:'center', alignContent:'center', justifyContent:'center'}}>
@@ -65,7 +65,6 @@ export function NavMenu({ children, items, buttons }: NavMenuProps) {
 const styles = {
   container: {
     display: "flex",
-    flexDirection: "column",
     width: "100%",
   },
   header: {

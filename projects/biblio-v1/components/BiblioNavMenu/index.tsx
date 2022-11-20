@@ -9,7 +9,7 @@ const pages = {
 
 interface BiblioNavMenuProps {
   children: any;
-  page: 'home' | 'editoras' | 'livros'
+  page?: 'home' | 'editoras' | 'livros'
   buttons?: NavButton[];
 }
 
