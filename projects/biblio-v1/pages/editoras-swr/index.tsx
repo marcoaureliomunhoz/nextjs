@@ -9,8 +9,7 @@ import {useRouter} from "next/router";
 import {Modal} from "../../components/Modal";
 import Swal from 'sweetalert2';
 
-// @ts-ignore
-const fetcher = (...args: any[]) => fetch(...args).then((res) => res.json());
+const fetcher = (...args: [any]) => fetch(...args).then((res) => res.json());
 
 export default function EditorasSwrPage() {
 
