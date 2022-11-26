@@ -1,46 +1,24 @@
-import React from 'react';
-import Head from 'next/head';
-import {useRouter} from 'next/router';
-import {FiEdit} from 'react-icons/fi';
-import {RiAddCircleLine, RiDeleteBin5Line, RiExternalLinkLine} from 'react-icons/ri';
-import {BiblioNavMenu} from '../../components/BiblioNavMenu';
-import {Modal} from '../../components/Modal';
-import {db} from '../../infra/data/db';
-import {Editora} from '../../models/Editora';
+import useSWR from 'swr';
+import {Editora} from "../../models/Editora";
+import Head from "next/head";
+import {BiblioNavMenu} from "../../components/BiblioNavMenu";
+import {RiAddCircleLine, RiDeleteBin5Line, RiExternalLinkLine} from "react-icons/ri";
+import {FiEdit} from "react-icons/fi";
+import React from "react";
+import {useRouter} from "next/router";
+import {Modal} from "../../components/Modal";
+import Swal from 'sweetalert2';
 
-interface PageProps {
-  editoras: Editora[];
-}
+// @ts-ignore
+const fetcher = (...args: any[]) => fetch(...args).then((res) => res.json());
 
-interface StaticProps {
-  props: PageProps;
-  revalidate?: number;
-}
+export default function EditorasSwrPage() {
 
-// mesmo fazendo reload após adicionar/alterar/excluir uma editora
-// as alterações no banco de dados não refletem em getStaticProps
-// para que as alterações reflitam é necessário usar revalidate (Incremental Static Regeneration)
-
-export async function getStaticProps(context: any): Promise<StaticProps> {
+  const { data, error } = useSWR('/api/editoras', fetcher);
   
-  const editoras = await db.editora.findMany();
-
-  return {
-    props: {
-      editoras: editoras.map(editora => ({
-        id: Number(editora.id),
-        nome: editora.nome
-      }))
-    },
-    revalidate: 10
-  };
-}
-
-export default function PageEditoras({
-  editoras
-}: PageProps) {
-
   const router = useRouter();
+  const editoras = data ? data.data as Editora[] : [];
+  
   const [modalForm, setModalForm] = React.useState<boolean>(false);
   const [idEditora, setIdEditora] = React.useState<number>(0);
   const [nomeEditora, setNomeEditora] = React.useState<string>('');
@@ -88,25 +66,25 @@ export default function PageEditoras({
       >
         <table style={{width:'100%'}}>
           <thead>
-            <tr>
-              <th style={{width:'150px', minWidth:'150px', maxWidth:'150px'}}>Código</th>
-              <th style={{width:'90%'}}>Nome</th>
-              <th style={{width:'64px', minWidth:'64px'}}></th>
-            </tr>
+          <tr>
+            <th style={{width:'150px', minWidth:'150px', maxWidth:'150px'}}>Código</th>
+            <th style={{width:'90%'}}>Nome</th>
+            <th style={{width:'64px', minWidth:'64px'}}></th>
+          </tr>
           </thead>
           <tbody>
-            {editoras?.map(editora => {
-              return (
-                <tr key={`editora-${editora.id}`}>
-                  <td>{editora.id}</td>
-                  <td>{editora.nome}</td>
-                  <td style={{display:'flex', justifyContent:'space-between', alignItems:'center', alignContent:'center'}}>
-                    <FiEdit size='24px' color='gray' style={{cursor:'pointer'}} onClick={() => editar(editora)} />
-                    <RiDeleteBin5Line size='26px' color='red' style={{cursor:'pointer'}} onClick={() => excluir(editora)} />
-                  </td>
-                </tr>
-              );
-            })}
+          {editoras?.map(editora => {
+            return (
+              <tr key={`editora-${editora.id}`}>
+                <td>{editora.id}</td>
+                <td>{editora.nome}</td>
+                <td style={{display:'flex', justifyContent:'space-between', alignItems:'center', alignContent:'center'}}>
+                  <FiEdit size='24px' color='gray' style={{cursor:'pointer'}} onClick={() => editar(editora)} />
+                  <RiDeleteBin5Line size='26px' color='red' style={{cursor:'pointer'}} onClick={() => excluir(editora)} />
+                </td>
+              </tr>
+            );
+          })}
           </tbody>
         </table>
       </BiblioNavMenu>
@@ -149,17 +127,39 @@ export default function PageEditoras({
       )
     }).then(async response => {
       //const data = await response.json();
+      console.log('salvo com sucesso!');
       fecharModal();
+      //alert('Salvo com sucesso!');
       //router.reload();
+      // const myWindow = window.open("", "", "width=1,height=1,innerWidth=1,innerHeight=1,toolbar=0,top=9999999");
+      // myWindow?.blur();
+      // myWindow?.close();
+      Swal.fire({
+        title: 'Sucesso!',
+        text: 'Editora registrada com sucesso.',
+        icon: 'success',
+        confirmButtonText: 'Ok'
+      });
     });
   }
 
-  function excluir(editora: Editora) {
-    if (!confirm(`Confirma a exclusão da editora ${editora.nome}?`)) return;
+  async function excluir(editora: Editora) {
+    //if (!confirm(`Confirma a exclusão da editora ${editora.nome}?`)) return;
+    const result = await Swal.fire({
+      title: `Confirma a exclusão da editora ${editora.nome}?`,
+      showDenyButton: true,
+      confirmButtonText: 'Sim',
+      denyButtonText: 'Não',
+      icon: 'question',
+    });
+    if (!result.isConfirmed) return;
     fetch(`/api/editoras/${editora.id}`, {
       method: 'DELETE'
     }).then(async _ => {
-      router.reload();
+      //router.reload();
+      // const myWindow = window.open("", "", "width=1,height=1,innerWidth=1,innerHeight=1,toolbar=0,top=9999999");
+      // myWindow?.blur();
+      // myWindow?.close();
     });
   }
 
@@ -168,4 +168,4 @@ export default function PageEditoras({
     setNomeEditora(editora.nome);
     setModalForm(true);
   }
-}
+} 

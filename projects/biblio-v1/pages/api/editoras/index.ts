@@ -21,6 +21,16 @@ export default async function handler(
         id: Number(result.id)
       });
     }
+    
+    if (req.method === 'GET') {
+      const editoras = await db.editora.findMany();
+      return res.status(200).json({
+        data: editoras.map(editora => ({
+          id: Number(editora.id),
+          nome: editora.nome
+        }))
+      });
+    }
 
     return res.status(404);
   } catch (error) {
