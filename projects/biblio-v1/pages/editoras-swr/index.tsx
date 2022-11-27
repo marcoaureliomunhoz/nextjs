@@ -57,7 +57,7 @@ export default function EditorasSwrPage() {
         <title>Editoras</title>
       </Head>
       <BiblioNavMenu
-        page='editoras'
+        page='editoras-swr'
         buttons={[
           {title: 'Adicionar por modal', rightIcon: <RiAddCircleLine />, click: adicionarPorModal},
           {title: 'Adicionar por página', rightIcon: <RiExternalLinkLine />, click: adicionarPorPagina},

@@ -4,6 +4,7 @@ import { NavButton, NavMenu } from '../NavMenu';
 const pages = {
   Home: 'home',
   Editoras: 'editoras',
+  EditorasSwr: 'editoras-swr',
   Livros: 'livros'
 }
 
@@ -32,6 +33,12 @@ export function BiblioNavMenu({
           title: 'Editoras',
           link: '/editoras',
           active: page === pages.Editoras,
+        },
+        {
+          id: pages.EditorasSwr,
+          title: 'Editoras SWR',
+          link: '/editoras-swr',
+          active: page === pages.EditorasSwr,
         },
         {
           id: pages.Livros,
