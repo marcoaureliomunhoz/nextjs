@@ -7,21 +7,20 @@ import {BiblioNavMenu} from '../../components/BiblioNavMenu';
 import {Modal} from '../../components/Modal';
 import {db} from '../../infra/data/db';
 import {Editora} from '../../models/Editora';
+import {GetStaticPropsContext, GetStaticPropsResult, NextPage} from "next";
 
-interface PageProps {
-  editoras: Editora[];
+type PageParams = {
 }
 
-interface StaticProps {
-  props: PageProps;
-  revalidate?: number;
+type PageProps = {
+  editoras: Editora[];
 }
 
 // mesmo fazendo reload após adicionar/alterar/excluir uma editora
 // as alterações no banco de dados não refletem em getStaticProps
 // para que as alterações reflitam é necessário usar revalidate (Incremental Static Regeneration)
 
-export async function getStaticProps(context: any): Promise<StaticProps> {
+export async function getStaticProps(context: GetStaticPropsContext<PageParams>): Promise<GetStaticPropsResult<PageProps>> {
   
   const editoras = await db.editora.findMany();
 
@@ -36,9 +35,9 @@ export async function getStaticProps(context: any): Promise<StaticProps> {
   };
 }
 
-export default function PageEditoras({
+const PageEditoras: NextPage<PageProps> = ({
   editoras
-}: PageProps) {
+}) => {
 
   const router = useRouter();
   const [modalForm, setModalForm] = React.useState<boolean>(false);
@@ -169,3 +168,5 @@ export default function PageEditoras({
     setModalForm(true);
   }
 }
+
+export default PageEditoras;
